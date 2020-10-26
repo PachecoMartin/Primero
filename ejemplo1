@@ -1,25 +1,36 @@
 #include <iostream>
 #include <stdlib.h>
+#include <conio.h>
+#include <stdlib.h>
+
 using namespace std;
+
 //estructura del arbolito
+
 typedef struct nodo{
     int nro;
     struct nodo *izq, *der;
 }*ABB;    //tipo de arbol ABB
+
 //el numero de nodos del arbol ABB
 int numNodos = 0;
 //nodos menores que un numero k ingresado
 int numK =0, k;
+
+
 //vamos a crear una estructura de la cola del arbol
+
 struct nodoCola{
     ABB ptr;
     struct nodoCola *sgte;
 };
+
 //vamos a crear la cola
 struct cola{
     struct nodoCola *delante;
     struct nodoCola *atras;
 };
+
 //inicializacion de la colita
 void inicializarCola(struct cola &q){
     //estamos apuntando a la direccion de memoria donde va a iniciar la cola
@@ -31,7 +42,9 @@ void inicializarCola(struct cola &q){
     q.delante = NULL;
     q.atras = NULL;
 }
+
 //adentro de la cola
+
 void enCola(struct cola &q, ABB n){
     struct nodoCola *p;
     p = new(struct nodoCola);
@@ -43,14 +56,14 @@ void enCola(struct cola &q, ABB n){
         (q.atras)->sgte = p;
     }
     q.atras = p;
-
+    
 }
 
 //desencolar: salir de la cola
 
 ABB desencolar(struct cola &q){
     struct nodoCola *p;
-
+    
     ABB n = p->ptr;
     q.delante = (q.delante)->sgte;
     delete(p);
@@ -100,7 +113,7 @@ void preorden(ABB arbol){
 
 void inorden(ABB arbol){
     if(arbol!=NULL){
-
+        
         inorden(arbol->izq);
         cout<<arbol->nro<<" ";
         inorden(arbol->der);
@@ -109,11 +122,11 @@ void inorden(ABB arbol){
 
 void postorden(ABB arbol){
     if(arbol!=NULL){
-
+        
         postorden(arbol->izq);
         postorden(arbol->der);
         cout<<arbol->nro<<" ";
-
+        
     }
 }
 
@@ -132,8 +145,8 @@ void verArbol(ABB arbol, int n){
             numNodos++;
             cout<<arbol->nro<<endl;
     verArbol(arbol->izq, n+1);
-
-
+        
+    
 }
 
 
@@ -213,6 +226,7 @@ int alturaABB(ABB arbol){
             return altder+1;
         }
     }
+    
 }
 
 
@@ -267,14 +281,14 @@ void nodosMenoresQueK(ABB arbol, int n){
     nodosMenoresQueK(arbol->der, n+1);
     if(arbol->nro < k)
         numK++;
-    nodosMenoresQueK(arbol-izq, n+1);
+    nodosMenoresQueK(arbol->izq, n+1);
 }
 
 //contar las hojas
 int contarHojas(ABB arbol){
 
     if(arbol == NULL){
-        return;
+        return 0;
     }
     if((arbol->der == NULL) && (arbol->izq == NULL)){
         return 1;
@@ -283,31 +297,112 @@ int contarHojas(ABB arbol){
         return contarHojas(arbol->izq) + contarHojas(arbol->der);
     }
 }
-
-
-//wiiiii tarea al finn T_T   T_T   
-
-// el menu principal
-/*
-    menu con las opciones de:
-    insertar elemento
-    mostrar arbol
-    recorridos del arbol
-    buscar elemento
-    eliminar elmento
-    recorrido por niveles
-        en orden
-        pre orden
-        postorden
-    altura del arbol
-    construir arbol reflejo
-    contar nodos
-    contar hojas
-    nodos menos que k 
-    salir
-*/
+void limpiar(){
+		cout<<"\n\nPresione cualquier tecla";
+        getch();
+}
 
 int main(){
-
-
-} 
+	int opc;
+	do{
+	
+	
+	cout<<"\t\tMenu\n"<<
+	"	1. Insertar un elemento\n"<<
+	"	2. Mostrar arbol\n"<<
+	"	3. Recorridos de arbol\n"<<
+	"	4. Buscar elemento\n"<<
+	"	5. Eliminar elemento\n"<<
+	"	6. Recorrido por niveles\n"<<
+	"	7. Altura del arbol\n"<<
+	"	8. Construir arbol reflejo\n"<<
+	"	9. Contar hojas\n"<<
+	"	10. Nodos menores que k\n"<<
+	"	11. Salir\n"<<
+	"Eliga una opcion: ";
+	cin>>opc;
+	int x;
+	ABB arbol;
+	
+	switch(opc){
+		case 1:
+			cout<<"Inserte el elemento a insertar: ";
+			cin>>x;
+			insertar(arbol,x);
+			limpiar();
+		break;
+		case 2:
+			verArbol(arbol,x);
+			limpiar();
+			 
+		break;
+		case 3:
+			int opc2;
+			cout<<"\tMenu\n"<<
+			"	1. PreOrden\n"<<
+			"	2. InOrden\n"<<
+			"	3. PostOrden\n"<<
+			"Eliga una opcion: ";
+			cin>>opc2;
+			if (opc2==1){
+				preorden(arbol);
+			}else if(opc2==2){
+				inorden(arbol);
+			}else if(opc2==3){
+				postorden(arbol);
+			}
+			limpiar();
+		break;
+		case 4:
+			int dato;
+			cout<<"Ingrese el valor a buscar: ";
+			cin>>dato;
+			if(buscarArbol(arbol,dato))
+			
+				cout<<"El dato exite";
+			else
+			
+				cout<<"Dato no exite";
+			limpiar();
+		break;
+		case 5:
+			int datoE;
+			cout<<"Ingrese el dato a eliminar: ";
+			cin>>datoE;
+			eliminar(arbol,datoE);
+			limpiar();
+		break;
+		case 6:
+			recorrerNiveles(arbol);
+			limpiar();
+		break;
+		case 7:
+			cout<<alturaABB(arbol);
+			
+			limpiar();
+		break;
+		case 8:
+		arbolEspejo(arbol);
+		limpiar(); 
+		break;
+		case 9:
+			cout<<contarHojas(arbol);
+			limpiar(); 
+		break;
+		case 10:
+		int dato12; 
+			cout<<"Ingrese el valor del dato";
+			cin>>dato12;
+			nodosMenoresQueK(arbol,dato12);
+			limpiar();
+		break;
+		case 11: 
+			exit(0);
+		break;
+		default:
+			cout<<"Opcion no valida :v ";
+			break;	
+	}
+	system("cls");
+}while(opc);    
+}
